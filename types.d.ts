@@ -1,4 +1,4 @@
-interface Book {
+type Book = {
     id: string;
     title: string;
     first_published_year: number;
