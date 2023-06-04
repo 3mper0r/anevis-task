@@ -1,0 +1,25 @@
+.login {
+    margin-bottom: 2rem;
+    font-size: x-large;
+}
+
+form {
+    display: grid;
+    gap: 0.7rem;
+}
+
+button {
+    background-color: #2a60eb; 
+    color: white; 
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 16px;
+    outline: 1px solid #0d0d0e;
+    cursor: pointer;
+}
+
+input {
+    height: 25px;
+    border-radius: 8px;
+    padding: 0.5rem;
+}
