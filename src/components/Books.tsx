@@ -7,7 +7,7 @@ const Books = () => {
   
     const [books, setBooks] = useState<Book[]>([])
     const [error, setError] = useState()
-    const [loading, setLoading] = useState(false)
+    const [isLoading, setLoading] = useState(false)
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -19,11 +19,13 @@ const Books = () => {
           console.log(booksData);
         
         setBooks(JSON.parse(booksData))
+        setLoading(false)
         } catch(err) {
           if (err instanceof Error) {
             // letting TypeScript know err is Error
             console.log(`Error: ${err.message}`);
           }  
+        setLoading(false)
         }
       }
       
@@ -33,7 +35,10 @@ const Books = () => {
   return (
     <>
         <h1>Books</h1>
+        { isLoading ? <p>Loading...</p> :
+
         <BookItem books={books}/> 
+        }
     </>
   )
 }
