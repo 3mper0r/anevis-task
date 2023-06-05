@@ -1,21 +1,28 @@
-import booksData from '../../data/booksData'
+// //import booksData from '../../data/booksData'
 
-const BookItem = () => {
+interface BooksProps {
+    books: Book[]
+}
+
+
+const BookItem = ({books}: BooksProps) => {
   return (
     <>
-    
     {
-        booksData.map(book => (
-            <div key={book.title}>
+        books.map((book) => (
+            <article key={book.title}>
             <h2>{book.title}</h2>
-            <img src={book.covers.S} alt={book.title} />
-            <span>{book.author_name}</span>
-            <span>{book.number_of_pages_median}</span>
+            <img 
+                src={book.covers?.M}   
+                alt={book.title} 
+                loading='lazy'
+            />
+            <span>{book.author_name} </span>
+            <span><i>{book.number_of_pages_median}pg </i></span>
             <span>{book.first_publish_year}</span>
-            </div>
+            </article>
         ))
-        
-    }
+    } 
     </>
   )
 }

@@ -2,10 +2,11 @@ import {z} from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FieldValues, useForm } from 'react-hook-form'
 import "./Login.css"
+import { useState } from 'react'
 
 const schema = z.object({
-    username: z.string().min(4, {message: "username too short"}),
-    password: z.string().min(4, {message: "username too short"})
+    username: z.string().min(4, {message: "Username too short"}),
+    password: z.string().min(4, {message: "Password too short"})
 })
 
 type LoginForm = z.infer<typeof schema>
@@ -17,6 +18,7 @@ const Login = () => {
         formState: {errors, isValid},
     } = useForm<LoginForm>({ resolver: zodResolver(schema) })
   
+    const [formData, setFormData] = useState()
     const onSubmit = (data: FieldValues) => console.log(data);
     
     return (
