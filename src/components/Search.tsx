@@ -1,11 +1,10 @@
 import { ChangeEvent } from "react";
-
 interface searchProps {
     search: string;
-    setSearch: (e: ChangeEvent<HTMLInputElement>) => void
+    setSearch: (e: ChangeEvent<HTMLInputElement>) => void  
 }
 
-const Search = ( {search, setSearch}: searchProps) => {
+const Search = ({search, setSearch}: searchProps) => {
 
   return (
     <div>

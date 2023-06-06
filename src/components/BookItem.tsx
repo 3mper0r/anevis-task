@@ -10,7 +10,7 @@ const BookItem = ({books, search}: BooksProps) => {
         books.filter((book) => {
                  return search.toLowerCase() === '' 
                    ? book
-                   : book?.title?.toLowerCase().includes(search)
+                   : book.title.toLowerCase().includes(search)
                })
               .map((book) => (
                 <article key={book.title}>
