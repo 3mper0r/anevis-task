@@ -4,20 +4,14 @@ import Books from './components/Books'
 
 function App() {
 
-  // const search = new URLSearchParams({
-  //   action: 'query'
-  // })
-
   return (
     <>
-    <div className="wrapper">
-      <Login/>
-      
-    </div>
-    <main className=''>
-
-      <Books/>
-    </main>
+      <div className="wrapper ">
+        <Login/>
+      </div>
+      <main className=''>
+        <Books />
+      </main>
     </>
   )
 }

@@ -1,6 +1,7 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import BookItem from "./BookItem";
+import Search from "./Search";
 
 
 const Books = () => {
@@ -8,17 +9,17 @@ const Books = () => {
     const [books, setBooks] = useState<Book[]>([])
     const [error, setError] = useState()
     const [isLoading, setLoading] = useState(false)
+    const [search, setSearch] = useState("")
 
     useEffect(() => {
         const fetchBooks = async () => {
         setLoading(true)
         try {
           const response = await axios.get<Book[]>('http://localhost:3001/books')
-          const booksData = await response.data.value
-            
-          console.log(booksData);
+          const data = await response.data.value
+          const booksData = JSON.parse(data)
         
-        setBooks(JSON.parse(booksData))
+        setBooks(booksData)
         setLoading(false)
         } catch(err) {
           if (err instanceof Error) {
@@ -35,9 +36,10 @@ const Books = () => {
   return (
     <>
         <h1>Books</h1>
-        { isLoading ? <p>Loading...</p> :
-
-        <BookItem books={books}/> 
+        <Search search={search} setSearch={setSearch}/>
+        { isLoading 
+            ? <p>Loading...</p> 
+            : <BookItem books={books} search={search} /> 
         }
     </>
   )

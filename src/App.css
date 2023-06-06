@@ -1,20 +1,19 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
-html {
-    background-color: blanchedalmond;
+body {
+    background-color: #d4b98d; 
+    display: grid;
+    place-items: center;
+    height: 95vh;
 } 
 
 .wrapper {
-    display:inline-grid;
-    justify-items: center;
-    background-color: rgb(44, 41, 37);
+    display: grid;
+    background-color: rgb(46, 42, 37);
     color: white;
     padding: 3rem 5rem;
-    border-radius: 8px;
-}
-
-button:disabled {
-    opacity: 0.3;
+    border-radius: 2rem;
+    box-shadow: white 5px 5px 55px 10px;
 }
