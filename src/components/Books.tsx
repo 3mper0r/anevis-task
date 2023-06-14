@@ -1,7 +1,11 @@
-import axios, { AxiosError, CanceledError } from "axios";
 import { useState, useEffect } from "react";
 import BookItem from "./BookItem";
 import Search from "./Search";
+import axios from '../api/axios'
+import {AxiosError, CanceledError } from 'axios'
+import { Link } from "react-router-dom";
+
+const BOOKS_URL = '/books'
 
 const Books = () => {
   
@@ -15,18 +19,19 @@ const Books = () => {
         setLoading(true)
         const fetchBooks = async () => {
         try {
-          const response = await axios.get<Book[]>('http://localhost:3001/books', {
-            signal: controller.signal
-          })
-          const data = await response.data.value
-          const booksData = JSON.parse(data)
-
-        setBooks(booksData)
-        setLoading(false)
+            const response = await axios.get<Book[]>(BOOKS_URL,
+            {
+                signal: controller.signal,  
+                //withCredentials: true
+            },
+          )
+            const data = await response.data
+            setBooks(data)     
+            setLoading(false)
         } catch(err) {
           if (err instanceof CanceledError) return;
-        setError((err as AxiosError).message);  
-        setLoading(false)
+            setError((err as AxiosError).message);  
+            setLoading(false)
         }
       }
       fetchBooks()
@@ -35,13 +40,16 @@ const Books = () => {
     }, [])
 
   return (
-    <>
+    <> 
         {error && <div>{error}</div>}
         {isLoading && <div>Loading...</div>}
         <Search search={search} setSearch={setSearch}/>
         { isLoading 
             ? <p>Loading...</p> 
-            : <BookItem books={books} search={search} /> 
+            :  <section className="main-section">
+                <BookItem books={books} search={search} />
+                </section>
+                
         }
     </>
   )

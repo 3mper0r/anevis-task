@@ -1,3 +1,25 @@
+.login-wrapper {
+    display: grid;
+    place-items: center;
+    background-color: rgb(46, 42, 37);
+    color: white;
+    padding: 3rem 5rem;
+    border-radius: 2rem;
+    box-shadow: white 5px 5px 55px 10px;
+    position: absolute;
+    left: 40%;
+    top: 20%;
+}
+
+.login-input {
+    height: 25px;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin: 1rem 0;
+    border: none;
+}
+
 .login-title {
     margin-bottom: 2rem;
     font-size: x-large;
@@ -20,13 +42,6 @@ button {
 
 button:hover {
     opacity: 0.85;
-}
-
-input {
-    height: 25px;
-    border-radius: 8px;
-    padding: 0.5rem;
-    border: none;
 }
 
 input:focus {

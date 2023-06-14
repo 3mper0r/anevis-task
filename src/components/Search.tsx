@@ -13,6 +13,7 @@ const Search = ({search, setSearch}: searchProps) => {
         id="search"
         value={search} 
         onChange={(e) => setSearch(e.target.value)}
+        className="search-input"
         placeholder="Search the title"
     />
     </div>

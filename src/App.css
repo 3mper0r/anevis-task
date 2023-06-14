@@ -3,17 +3,42 @@
 @tailwind utilities; */
 
 body {
-    background-color: #d4b98d; 
-    display: grid;
-    place-items: center;
+    background-color: #d4b98d;   
     height: 95vh;
 } 
 
-.wrapper {
+h2 {
+    text-align: center;
+}
+.main-section {
     display: grid;
-    background-color: rgb(46, 42, 37);
-    color: white;
-    padding: 3rem 5rem;
-    border-radius: 2rem;
-    box-shadow: white 5px 5px 55px 10px;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    box-shadow: #2c2720 0px 0px 60px 0px;
+    margin-top: 2rem;
+}
+
+.books-section {
+    display: grid;
+    justify-items: center;
+    grid-template-columns: 300px; 
+    border-radius: 20px;
+}
+
+.search-input {
+    height: 25px;
+    justify-content: center;
+    width: 30%;
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin: 1rem 0;
+    border: none;
+}
+
+img {
+    display: grid;
+    place-content: center;
+}
+span {
+    display: inline-grid;
+    margin: 0.2rem;
 }
