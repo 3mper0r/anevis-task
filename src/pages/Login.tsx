@@ -1,18 +1,13 @@
-import {isValid, object, z} from 'zod'
+import { z} from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FieldValues, useForm } from 'react-hook-form'
 import "./Login.css"
-import { useState, ChangeEvent, FormEventHandler } from 'react'
+import { useState } from 'react'
 import useAuth from '../hooks/useAuth'
 import axios from '../api/axios'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const LOGIN_URL = '/login'
-const userdata = {
-    username: "admin",
-    password: "admin"
-}
 
 const schema = z.object({
     username: z.string().min(4, {message: "Username too short"}),
@@ -29,19 +24,16 @@ const Login = () => {
         formState: {errors, isValid},
     } = useForm<LoginForm>({ resolver: zodResolver(schema) })
     
-    const { setAuth } = useAuth()
-  
+    //const { setAuth } = useAuth()
     //const [username, setUsername] = useState(userdata.username)
     //const [password, setPassword] = useState(userdata.password)
     const [formData, setFormData] = useState()
     const navigate = useNavigate()
     const location = useLocation()
     const from = location.state?.from?.pathname || "/"
-    
-    const onSubmit = async ( ) => {
+
+    const onSubmit = async (data: FieldValues ) => {
         
-        
-        // const {username, password} = userdata
         try {
             
             const response = await axios.post(LOGIN_URL,        
@@ -54,10 +46,7 @@ const Login = () => {
             )
             //JSON.stringify({username, password})
             const token = response.data.token
-            console.log(token);
             //setAuth({username, password, token})  
-            //setUsername('')
-            //setPassword('')
             navigate('/books')          
             //navigate(from, {replace: true})
         } catch(err) {
@@ -94,7 +83,7 @@ const Login = () => {
         {errors.password && (
             <p>{errors.password.message}</p>
         )} 
-        <button disabled={!isValid} type="submit" >Login</button>
+        <button disabled={!isValid} type="submit">Login</button>
     </form>
     </div>
     </>

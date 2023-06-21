@@ -11,3 +11,8 @@ type Book = {
         }
     author_name: string
 }
+
+type Books = {
+    id: string;
+    books: Book[]
+}

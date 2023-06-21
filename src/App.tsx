@@ -20,9 +20,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login/>} />
         <Route path="login" element={<Login />} />
-        <Route element={<RequireAuth/>}>
+        {/* <Route element={<RequireAuth/>}> */}
           <Route path="books" element={<Books />} />
-        </Route>       
+        {/* </Route>        */}
         <Route path="*" element={<h1>Not Found</h1>}/>
       </Routes>
     </>

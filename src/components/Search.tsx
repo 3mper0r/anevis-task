@@ -1,10 +1,18 @@
-import { ChangeEvent } from "react";
+
+import { useState } from "react";
+import AddBook from "./AddBook";
+
 interface searchProps {
     search: string;
-    setSearch: (e: ChangeEvent<HTMLInputElement>) => void  
+    setSearch: React.Dispatch<React.SetStateAction<string>>
 }
 
 const Search = ({search, setSearch}: searchProps) => {
+
+
+  const [showModal, setShowModal] = useState(false)
+  const handleShow = () => setShowModal(true)
+  const handleClose = () => setShowModal(false)
 
   return (
     <div>
@@ -16,6 +24,10 @@ const Search = ({search, setSearch}: searchProps) => {
         className="search-input"
         placeholder="Search the title"
     />
+    <button onClick={handleShow}>
+      Add Book
+    </button>
+    <AddBook isVisible={showModal} handleClose={handleClose} showModal={showModal} />
     </div>
   )
 }
