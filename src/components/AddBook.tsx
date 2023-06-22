@@ -17,8 +17,8 @@ const addBookSchema = z.object({
     bookTitle: z.string().min(4, { message: "Username too short" }),
     bookCover: z
          .any()
-         .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-         .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
          "Only .jpg, .jpeg, .png and .webp formats are supported."
     ),
     authorName: z.string().min(4, { message: "Author name is too short" }),

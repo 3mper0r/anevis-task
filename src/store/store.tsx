@@ -29,7 +29,7 @@ const useBookStore = create<{
                      first_publish_year: book.first_publish_year, 
                      number_of_pages_median: book.number_of_pages_median, 
                      covers: book.covers, 
-                     author_name: book.author_name
+                     author_name: book.author_name,
                 },
             ]
         })),
