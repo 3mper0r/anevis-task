@@ -2,53 +2,50 @@ import { z} from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FieldValues, useForm } from 'react-hook-form'
 import "./Login.css"
-import { useState } from 'react'
 import useAuth from '../hooks/useAuth'
 import axios from '../api/axios'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const LOGIN_URL = '/login'
 
-const schema = z.object({
+const Schema = z.object({
     username: z.string().min(4, {message: "Username too short"}),
     password: z.string().min(4, {message: "Password too short"})
 })
 
-type LoginForm = z.infer<typeof schema>
+type LoginForm = z.infer<typeof Schema>
 
 const Login = () => {
     
+    const { setAuth }:any = useAuth()
     const {
         register, 
         handleSubmit, 
-        formState: {errors, isValid},
-    } = useForm<LoginForm>({ resolver: zodResolver(schema) })
+        reset,
+        formState: {errors, isValid}
+    } = useForm<LoginForm>({ resolver: zodResolver(Schema) })
     
-    //const { setAuth } = useAuth()
-    //const [username, setUsername] = useState(userdata.username)
-    //const [password, setPassword] = useState(userdata.password)
-    const [formData, setFormData] = useState()
     const navigate = useNavigate()
     const location = useLocation()
     const from = location.state?.from?.pathname || "/"
 
-    const onSubmit = async (data: FieldValues ) => {
-        
+    const onSubmit = async ( formData: FieldValues ) => {
         try {
-            
-            const response = await axios.post(LOGIN_URL,        
+            const response = await axios.post(LOGIN_URL,
+                JSON.stringify(formData),                       
                 {
+                    //username: 'admin',
+                    //password: 'admin',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json, */*'
+                        'Accept': 'application/json, */*',
                     },
                 }
             )
-            //JSON.stringify({username, password})
-            const token = response.data.token
-            //setAuth({username, password, token})  
-            navigate('/books')          
-            //navigate(from, {replace: true})
+            console.log(JSON.stringify(response?.data));
+            const token = response?.data?.token
+            setAuth({username, password, token})     
+            navigate(from, {replace: true})
         } catch(err) {
             console.log(`Error: ${err}`);
         }
@@ -58,35 +55,35 @@ const Login = () => {
     <>
     <div className='login-wrapper'>
     <h1 className='login-title'>Login</h1>
-    <form onSubmit={handleSubmit(onSubmit)}  >
-        <label htmlFor="username">Username</label>
+    <form onSubmit={handleSubmit(onSubmit)}   >
+        <label htmlFor="username" className="text-white">Username</label>
         <input 
             {...register("username")}
             type="text" 
             id="username"
-            //value={username}
-            //onChange={(e) => setUsername(e.target.value)} 
             className="login-input"
         />
         {errors.username && (
             <p>{errors.username.message}</p>
         )}
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password" className="text-white">Password</label>
         <input 
             {...register("password")}
             type="password" 
             id="password"
-            //value={password}
-            //onChange={(e) => setPassword(e.target.value)}
             className="login-input"
         />
         {errors.password && (
             <p>{errors.password.message}</p>
         )} 
-        <button disabled={!isValid} type="submit">Login</button>
+        <button 
+            disabled={!isValid}
+            //onClick={() => reset()}
+        >Login</button>
     </form>
     </div>
     </>
   )
 }
+
 export default Login

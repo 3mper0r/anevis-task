@@ -14,6 +14,10 @@ const useBookStore = create<{
     fetchBooks: async () => {
         const controller = new AbortController()
         const response = await axios.get<Book[]>(BOOKS_URL,{
+            headers : {
+                "Authorization": "Bearer Y29ycmVjdC1ob3JzZS1iYXR0ZXJ5LXN0YXBsZQ==",
+                "Accept": "Application/json, */*"
+            },
             signal: controller.signal   
         })
         set({books: response.data})
@@ -22,7 +26,6 @@ const useBookStore = create<{
     addBook: (book: Book) => 
         set((state) => ({
             books: [
-                ...state.books, 
                 {
                      id: book.id, 
                      title: book.title, 
@@ -31,6 +34,7 @@ const useBookStore = create<{
                      covers: book.covers, 
                      author_name: book.author_name,
                 },
+                ...state.books, 
             ]
         })),
     removeBook: (title: string) => 

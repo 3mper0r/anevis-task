@@ -2,7 +2,7 @@
     display: grid;
     place-items: center;
     background-color: rgb(46, 42, 37);
-    color: white;
+    /* color: white; */
     padding: 3rem 5rem;
     border-radius: 2rem;
     box-shadow: white 5px 5px 55px 10px;

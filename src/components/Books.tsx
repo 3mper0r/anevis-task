@@ -9,7 +9,7 @@ const Books = () => {
     const [isLoading, setLoading] = useState(false)
     const [search, setSearch] = useState("")
     
-    const { fetchBooks} = useBookStore((state) => state)
+    const { fetchBooks } = useBookStore((state) => state)
     
     useEffect(() => {     
       fetchBooks()  
