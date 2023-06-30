@@ -6,6 +6,7 @@ interface BooksProps {
 const BookItem = ({search}: BooksProps) => {
 
   const { books, removeBook} = useBookStore((state) => state)
+  // console.log(books);
   
   return (
     <>
@@ -16,14 +17,14 @@ const BookItem = ({search}: BooksProps) => {
                   : book.title.toLowerCase().includes(search)
               })
             .map((book) => (
-              <article className="books-section" key={book.title}>
+              <article className="books-section" key={book.id}>
                 <h2>{book.title}</h2>
                 <div>
                 <button>
                   Edit Book
                 </button>
                 <button
-                onClick={() => removeBook(book.title)}
+                onClick={() => removeBook(book.id)}
                 >X</button>
                 </div>
                 <img 

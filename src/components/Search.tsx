@@ -1,6 +1,8 @@
 
 import { useState } from "react";
 import AddBook from "./AddBook";
+import Cookies from "js-cookie"
+import { useNavigate } from "react-router-dom";
 
 interface searchProps {
     search: string;
@@ -9,10 +11,16 @@ interface searchProps {
 
 const Search = ({search, setSearch}: searchProps) => {
 
-
   const [showModal, setShowModal] = useState(false)
   const handleShow = () => setShowModal(true)
   const handleClose = () => setShowModal(false)
+
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    Cookies.set('token', '')
+    navigate('/login')  
+  }
 
   return (
     <div>
@@ -28,6 +36,7 @@ const Search = ({search, setSearch}: searchProps) => {
       Add Book
     </button>
     <AddBook isVisible={showModal} handleClose={handleClose} showModal={showModal} />
+    <button onClick={handleLogout}>Logout</button>
     </div>
   )
 }

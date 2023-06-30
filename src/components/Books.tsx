@@ -12,7 +12,7 @@ const Books = () => {
     const { fetchBooks } = useBookStore((state) => state)
     
     useEffect(() => {     
-      fetchBooks()  
+      fetchBooks()
     }, [])
 
   return (
@@ -21,9 +21,9 @@ const Books = () => {
         <Search search={search} setSearch={setSearch}/>
         { isLoading 
             ? <h1>Loading...</h1> 
-            :  <section className="main-section">
+            : <section className="main-section" >
                 <BookItem search={search} />
-                </section>  
+              </section>   
         }
     </>
   )

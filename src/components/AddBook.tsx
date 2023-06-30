@@ -1,7 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldValues, useForm } from "react-hook-form"
 import { z } from "zod"
-import axios from "../api/axios"
+import useAuth from "../hooks/useAuth"
+import { axiosPrivate } from "../api/axios"
+import { v4 as uuidv4 } from 'uuid';
 
 const BOOKS_URL = '/books'
 const MAX_FILE_SIZE = 500000
@@ -17,52 +19,52 @@ const addBookSchema = z.object({
     bookTitle: z.string().min(4, { message: "Username too short" }),
     bookCover: z
          .any()
-         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+         .refine((files) => files?.length == 1, "Image is required")
+         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
          .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-         "Only .jpg, .jpeg, .png and .webp formats are supported."
-    ),
+         "Only .jpg, .jpeg, .png and .webp formats are supported."),
     authorName: z.string().min(4, { message: "Author name is too short" }),
-    bookPages: z.string().min(2),
-    publishedYear: z.string().min(4)
+    bookPages: z.string().min(2, { message: "Type a valid number"}),
+    publishedYear: z.string().min(4, { message: "Type a valid year"})
 })
 
 type AddBookForm = z.infer<typeof addBookSchema>
 
 const AddBook = ({isVisible, handleClose}: ModalProps) => {
- 
+    const id: string  = uuidv4()
+    //const { addNewBook } = useBookStore((state)=> state)
+    const { setAuth }:any = useAuth()
     const {
         register, 
-        handleSubmit, 
-        reset,
+        handleSubmit,
         formState: {errors, isValid},
     } = useForm<AddBookForm>({ resolver: zodResolver(addBookSchema)})
 
-    const handleNewBook = async ( data: FieldValues,) => {
-        
-        console.log(data);
+    const onSubmit = async ( formData: FieldValues ) => {
         try {
-            const response = await axios.post(BOOKS_URL, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json, */*'
-                },
-            })
-        }catch(err){
+            const response = await axiosPrivate.post(BOOKS_URL,
+                JSON.stringify({ id: id, ...formData})
+            )
+            console.log(JSON.stringify(response?.data));
+            const token = response?.data?.token        
+            setAuth(formData, {token})     
+        }        
+        catch(err) {
             console.log(`Error: ${err}`);
-        }  
+        }
     }
 
     if (!isVisible) return null
 
   return (
     <div className="fixed inset-0 backdrop-blur-md flex justify-center items-center ">
-        <form onSubmit={handleSubmit(handleNewBook)} className="bg-gray-400 p-10">
+        <form onSubmit={handleSubmit(onSubmit)} className="bg-gray-400 p-10">
             <h2 className="">AddBook</h2>
-            <label htmlFor="booktitle">Title</label>
+            <label htmlFor="bookTitle">Title</label>
             <input 
                 {...register("bookTitle")}
                 type="text" 
-                id="booktitle" 
+                id="bookTitle" 
             />
             {errors.bookTitle && (
                 <p>{errors.bookTitle.message}</p>
@@ -70,8 +72,10 @@ const AddBook = ({isVisible, handleClose}: ModalProps) => {
             <label htmlFor="bookCover">Cover</label>
             <input 
                 {...register("bookCover")}
-                type="file"  
+                type="file"
                 id="bookCover" 
+                datatype="image"
+
             /> 
             {errors.bookCover && (
                 <p>{errors.bookCover?.message}</p>
@@ -106,13 +110,11 @@ const AddBook = ({isVisible, handleClose}: ModalProps) => {
             <button
                 type="submit" 
                 disabled={!isValid}
-                onClick={() => reset()} 
             >
             Save book</button>
             <button onClick={handleClose} type="reset">Cancel</button>
         </form>
-    </div>
-    
+    </div>  
   )
 }
 

@@ -3,8 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FieldValues, useForm } from 'react-hook-form'
 import "./Login.css"
 import useAuth from '../hooks/useAuth'
-import axios from '../api/axios'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { axiosPrivate } from '../api/axios'
+import { useNavigate } from 'react-router-dom'
+import Cookie from 'js-cookie'
 
 const LOGIN_URL = '/login'
 
@@ -16,36 +17,22 @@ const Schema = z.object({
 type LoginForm = z.infer<typeof Schema>
 
 const Login = () => {
-    
+
     const { setAuth }:any = useAuth()
     const {
         register, 
-        handleSubmit, 
-        reset,
+        handleSubmit,
         formState: {errors, isValid}
     } = useForm<LoginForm>({ resolver: zodResolver(Schema) })
     
     const navigate = useNavigate()
-    const location = useLocation()
-    const from = location.state?.from?.pathname || "/"
-
+    
     const onSubmit = async ( formData: FieldValues ) => {
         try {
-            const response = await axios.post(LOGIN_URL,
-                JSON.stringify(formData),                       
-                {
-                    //username: 'admin',
-                    //password: 'admin',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json, */*',
-                    },
-                }
-            )
-            console.log(JSON.stringify(response?.data));
-            const token = response?.data?.token
-            setAuth({username, password, token})     
-            navigate(from, {replace: true})
+            const {data: token} = await axiosPrivate.post(LOGIN_URL, formData)
+            Cookie.set('token', token)
+            setAuth(formData, {token})
+            navigate('/books')     
         } catch(err) {
             console.log(`Error: ${err}`);
         }
@@ -55,7 +42,7 @@ const Login = () => {
     <>
     <div className='login-wrapper'>
     <h1 className='login-title'>Login</h1>
-    <form onSubmit={handleSubmit(onSubmit)}   >
+    <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="username" className="text-white">Username</label>
         <input 
             {...register("username")}
@@ -75,10 +62,9 @@ const Login = () => {
         />
         {errors.password && (
             <p>{errors.password.message}</p>
-        )} 
+        )}
         <button 
             disabled={!isValid}
-            //onClick={() => reset()}
         >Login</button>
     </form>
     </div>
