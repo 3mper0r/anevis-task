@@ -24,11 +24,14 @@ const useBookStore = create<{
         set({books: books})
         return () => controller.abort()
     },
-    removeBook: (id: string) => 
+    removeBook: async (id: string) =>  {
+        const {data} = await axiosPrivate.delete<Book[]>(`${BOOKS_URL}/${id}`)
+    
         set((state) => ({
-            ...state,
+            ...data,
             books: state.books.filter((newBooks) => newBooks.id !== id)
         }))
+    }
 }))
 
 export default useBookStore
