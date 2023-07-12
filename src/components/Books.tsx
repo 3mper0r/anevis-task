@@ -2,29 +2,28 @@ import { useState, useEffect } from "react";
 import BookItem from "./BookItem";
 import Search from "./Search";
 import useBookStore from "../store/store";
+import { ErrorBoundary } from "react-error-boundary";
+import { useParams } from "react-router-dom";
 
 const Books = () => {
 
-    const [error, setError] = useState("")
-    const [isLoading, setLoading] = useState(false)
-    const [search, setSearch] = useState("")
-    
+    const [search, setSearch] = useState("")  
+    const [book, setBook] = useState<Book>(Object) 
     const { fetchBooks } = useBookStore((state) => state)
-    
-    useEffect(() => {     
+
+    useEffect(() => { 
       fetchBooks()
     }, [])
-
+   
   return (
     <> 
-        {error && <div>{error}</div>}
-        <Search search={search} setSearch={setSearch}/>
-        { isLoading 
-            ? <h1>Loading...</h1> 
-            : <section className="main-section" >
-                <BookItem search={search} />
-              </section>   
-        }
+        
+        <ErrorBoundary fallback={<div>Something went wrong</div>}>
+          <Search search={search} setSearch={setSearch}/>
+          <section className="main-section" >
+            <BookItem search={search} id={book.id} />
+          </section>   
+        </ErrorBoundary>
     </>
   )
 }

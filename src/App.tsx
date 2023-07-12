@@ -3,6 +3,7 @@ import "./App.css"
 import Books from './components/Books'
 import { Route, Routes } from 'react-router-dom'
 import RequireAuth from './components/RequireAuth'
+import BookDetails from './components/BookDetails'
 
 function App() {
 
@@ -11,8 +12,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login/>} />
         <Route path="login" element={<Login />} />
-        <Route element={<RequireAuth/>}> 
-          <Route path="books" element={<Books />} />
+        <Route path="/books" element={<RequireAuth/>}> 
+          <Route index element={<Books />} />
+          <Route path=":id" element={<BookDetails />} />
         </Route>
         <Route path="*" element={<h1>Not Found</h1>}/>
       </Routes>

@@ -5,7 +5,7 @@ import "./Login.css"
 import useAuth from '../hooks/useAuth'
 import { axiosPrivate } from '../api/axios'
 import { useNavigate } from 'react-router-dom'
-import Cookie from 'js-cookie'
+import Cookies from 'js-cookie'
 
 const LOGIN_URL = '/login'
 
@@ -30,7 +30,7 @@ const Login = () => {
     const onSubmit = async ( formData: FieldValues ) => {
         try {
             const {data: token} = await axiosPrivate.post(LOGIN_URL, formData)
-            Cookie.set('token', token)
+            Cookies.set('token', token)
             setAuth(formData, {token})
             navigate('/books')     
         } catch(err) {

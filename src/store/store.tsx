@@ -1,49 +1,60 @@
 import { create } from 'zustand'
-import { axiosPrivate } from '../api/axios'
+import { axiosPrivate, axiosPublic } from '../api/axios'
 import Cookies from 'js-cookie'
+import { FieldValues } from 'react-hook-form'
 
 const BOOKS_URL = '/books'
 
+type newBook = {
+    title: string,
+    pages: number,
+    published_year: number
+}
+
 const useBookStore = create<{
     books: Book[],
+    //updatedBook: object,
+    fetchBooks: () => void,
+    //updateBook: (id: string, formData: FieldValues) => void,
     removeBook: (id: string) => void,
-    fetchBooks: () => void
-    //addBook: (book: Book) => void
 }>
-    ((set) => ({
+    ((set, get) => ({
     books: [],
+    //updatedBook: {},
     fetchBooks: async () => {
         const controller = new AbortController()
         const {data: books} = await axiosPrivate.get<Book[]>(BOOKS_URL,{
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json, */*',
-                'Authorization': `Bearer ${Cookies.get('token')}`,
+                'Authorization': `Bearer ${Cookies.get('token')}`
             },
             signal: controller.signal   
-        }) 
-        set({books})
+        })
+        set ({books: books})
         return () => controller.abort()
     },
-    // addBook: (book: Book) => 
+    // updateBook: async (title: string, formData: FieldValues) => {
+    //     const singleBook = get().books.find((book) => book.title === title)
+    //     console.log(singleBook);
+        
+    //     const {data} = await axiosPrivate.patch(`${BOOKS_URL}/${title}`, {
+    //         formData
+    //     }) 
+    //     console.log(data);
     //     set((state) => ({
-    //         books: [
-    //             {
-    //                  id: book.id, 
-    //                  title: book.title, 
-    //                  first_publish_year: book.first_publish_year, 
-    //                  number_of_pages_median: book.number_of_pages_median, 
-    //                  covers: book.covers, 
-    //                  author_name: book.author_name,
-    //             },
-    //             ...state.books, 
-    //         ]
-    //     })),
-    removeBook: (id: string) => 
+    //         ...state,
+    //         updatedBook: {...formData, singleBook}
+    //     }))
+    // },
+    removeBook: async (id: string) => {
+        const {data} = await axiosPrivate.delete<Book[]>(`${BOOKS_URL}/${id}`)
+    
         set((state) => ({
-            ...state,
+            ...data,
             books: state.books.filter((newBooks) => newBooks.id !== id)
         }))
+    }
 }))
 
 export default useBookStore
