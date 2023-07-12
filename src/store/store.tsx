@@ -8,7 +8,6 @@ const useBookStore = create<{
     books: Book[],
     removeBook: (id: string) => void,
     fetchBooks: () => void
-    //addBook: (book: Book) => void
 }>
     ((set) => ({
     books: [],
@@ -25,20 +24,6 @@ const useBookStore = create<{
         set({books})
         return () => controller.abort()
     },
-    // addBook: (book: Book) => 
-    //     set((state) => ({
-    //         books: [
-    //             {
-    //                  id: book.id, 
-    //                  title: book.title, 
-    //                  first_publish_year: book.first_publish_year, 
-    //                  number_of_pages_median: book.number_of_pages_median, 
-    //                  covers: book.covers, 
-    //                  author_name: book.author_name,
-    //             },
-    //             ...state.books, 
-    //         ]
-    //     })),
     removeBook: (id: string) => 
         set((state) => ({
             ...state,

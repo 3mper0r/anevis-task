@@ -18,7 +18,7 @@ const Search = ({search, setSearch}: searchProps) => {
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    Cookies.set('token', '')
+    Cookies.remove('token')
     navigate('/login')  
   }
 
@@ -32,9 +32,7 @@ const Search = ({search, setSearch}: searchProps) => {
         className="search-input"
         placeholder="Search the title"
     />
-    <button onClick={handleShow}>
-      Add Book
-    </button>
+    <button onClick={handleShow}>Add Book</button>
     <AddBook isVisible={showModal} handleClose={handleClose} showModal={showModal} />
     <button onClick={handleLogout}>Logout</button>
     </div>

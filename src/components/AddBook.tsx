@@ -1,14 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldValues, useForm } from "react-hook-form"
 import { z } from "zod"
-import useAuth from "../hooks/useAuth"
 import { axiosPrivate } from "../api/axios"
 import { v4 as uuidv4 } from 'uuid';
+import useBookStore from "../store/store"
 
 const BOOKS_URL = '/books'
-const MAX_FILE_SIZE = 500000
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
-
 interface ModalProps {
     isVisible: boolean;
     showModal: boolean;
@@ -16,24 +13,18 @@ interface ModalProps {
 }
 
 const addBookSchema = z.object({
-    bookTitle: z.string().min(4, { message: "Username too short" }),
-    bookCover: z
-         .any()
-         .refine((files) => files?.length == 1, "Image is required")
-         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, "Max file size is 5MB.")
-         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-         "Only .jpg, .jpeg, .png and .webp formats are supported."),
-    authorName: z.string().min(4, { message: "Author name is too short" }),
-    bookPages: z.string().min(2, { message: "Type a valid number"}),
-    publishedYear: z.string().min(4, { message: "Type a valid year"})
+    title: z.string().min(4, { message: "Username too short" }),
+    covers: z.string(),
+    author_name: z.string().min(4, { message: "Author name is too short" }),
+    number_of_pages_median: z.string().min(2, { message: "Type a valid number"}),
+    first_publish_year: z.string().min(4, { message: "Type a valid year"})
 })
 
 type AddBookForm = z.infer<typeof addBookSchema>
 
 const AddBook = ({isVisible, handleClose}: ModalProps) => {
     const id: string  = uuidv4()
-    //const { addNewBook } = useBookStore((state)=> state)
-    const { setAuth }:any = useAuth()
+    const {fetchBooks} = useBookStore((state) => state)
     const {
         register, 
         handleSubmit,
@@ -43,13 +34,11 @@ const AddBook = ({isVisible, handleClose}: ModalProps) => {
     const onSubmit = async ( formData: FieldValues ) => {
         try {
             const response = await axiosPrivate.post(BOOKS_URL,
-                JSON.stringify({ id: id, ...formData})
-            )
-            console.log(JSON.stringify(response?.data));
-            const token = response?.data?.token        
-            setAuth(formData, {token})     
-        }        
-        catch(err) {
+                JSON.stringify({ id: id, ...formData}))
+                handleClose()
+                fetchBooks()
+
+        }catch(err) {
             console.log(`Error: ${err}`);
         }
     }
@@ -60,52 +49,51 @@ const AddBook = ({isVisible, handleClose}: ModalProps) => {
     <div className="fixed inset-0 backdrop-blur-md flex justify-center items-center ">
         <form onSubmit={handleSubmit(onSubmit)} className="bg-gray-400 p-10">
             <h2 className="">AddBook</h2>
-            <label htmlFor="bookTitle">Title</label>
+            <label htmlFor="title">Title</label>
             <input 
-                {...register("bookTitle")}
+                {...register("title")}
                 type="text" 
-                id="bookTitle" 
+                id="title" 
             />
-            {errors.bookTitle && (
-                <p>{errors.bookTitle.message}</p>
+            {errors.title && (
+                <p>{errors.title.message}</p>
             )} 
-            <label htmlFor="bookCover">Cover</label>
+            <label htmlFor="covers">Cover</label>
             <input 
-                {...register("bookCover")}
+                {...register("covers")}
                 type="file"
-                id="bookCover" 
+                id="covers" 
                 datatype="image"
-
             /> 
-            {errors.bookCover && (
-                <p>{errors.bookCover?.message}</p>
+            {errors.covers && (
+                <p>{errors.covers?.message}</p>
             )} 
-            <label htmlFor="authorName">Author</label>
+            <label htmlFor="author_name">Author</label>
             <input
-                {...register("authorName")} 
+                {...register("author_name")} 
                 type="text" 
-                id="authorName" 
+                id="author_name" 
             />
-            {errors.authorName && (
-                <p>{errors.authorName.message}</p>
+            {errors.author_name && (
+                <p>{errors.author_name.message}</p>
             )}
-            <label htmlFor="bookPages">Pages</label>
+            <label htmlFor="number_of_pages_median">Pages</label>
             <input 
-                {...register("bookPages")}
+                {...register("number_of_pages_median")}
                 type="number" 
-                id="bookPages" 
+                id="number_of_pages_median" 
             />
-            {errors.bookPages && (
-                <p>{errors.bookPages.message}</p>
+            {errors.number_of_pages_median && (
+                <p>{errors.number_of_pages_median.message}</p>
             )}
-            <label htmlFor="publishedYear">Published Year</label>
+            <label htmlFor="first_publish_year">Published Year</label>
             <input
-                {...register("publishedYear")} 
+                {...register("first_publish_year")} 
                 type="number" 
-                id="publishedYear" 
+                id="first_publish_year"
             />
-            {errors.publishedYear && (
-                <p>{errors.publishedYear.message}</p>
+            {errors.first_publish_year && (
+                <p>{errors.first_publish_year.message}</p>
             )}
             <button
                 type="submit" 
