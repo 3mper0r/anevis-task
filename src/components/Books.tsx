@@ -2,13 +2,11 @@ import { useState, useEffect } from "react";
 import BookItem from "./BookItem";
 import Search from "./Search";
 import useBookStore from "../store/store";
+import { ErrorBoundary } from "react-error-boundary";
 
 const Books = () => {
 
-    const [error, setError] = useState("")
-    const [isLoading, setLoading] = useState(false)
-    const [search, setSearch] = useState("")
-    
+    const [search, setSearch] = useState("")    
     const { fetchBooks } = useBookStore((state) => state)
     
     useEffect(() => {     
@@ -17,14 +15,12 @@ const Books = () => {
 
   return (
     <> 
-        {error && <div>{error}</div>}
+      <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <Search search={search} setSearch={setSearch}/>
-        { isLoading 
-            ? <h1>Loading...</h1> 
-            : <section className="main-section" >
-                <BookItem search={search} />
-              </section>   
-        }
+        <section className="main-section" >
+          <BookItem search={search} />
+        </section>   
+      </ErrorBoundary>  
     </>
   )
 }

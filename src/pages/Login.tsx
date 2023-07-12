@@ -39,36 +39,36 @@ const Login = () => {
     }
     
     return (
-    <>
-    <div className='login-wrapper'>
-    <h1 className='login-title'>Login</h1>
-    <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="username" className="text-white">Username</label>
-        <input 
-            {...register("username")}
-            type="text" 
-            id="username"
-            className="login-input"
-        />
-        {errors.username && (
-            <p>{errors.username.message}</p>
-        )}
-        <label htmlFor="password" className="text-white">Password</label>
-        <input 
-            {...register("password")}
-            type="password" 
-            id="password"
-            className="login-input"
-        />
-        {errors.password && (
-            <p>{errors.password.message}</p>
-        )}
-        <button 
-            disabled={!isValid}
-        >Login</button>
-    </form>
-    </div>
-    </>
+        <>
+            <div className='login-wrapper'>
+            <h1 className='login-title'>Login</h1>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <label htmlFor="username" className="text-white">Username</label>
+                <input 
+                    {...register("username")}
+                    type="text" 
+                    id="username"
+                    className="login-input"
+                />
+                {errors.username && (
+                    <p>{errors.username.message}</p>
+                )}
+                <label htmlFor="password" className="text-white">Password</label>
+                <input 
+                    {...register("password")}
+                    type="password" 
+                    id="password"
+                    className="login-input"
+                />
+                {errors.password && (
+                    <p>{errors.password.message}</p>
+                )}
+                <button 
+                    disabled={!isValid}
+                >Login</button>
+            </form>
+            </div>
+        </>
   )
 }
 

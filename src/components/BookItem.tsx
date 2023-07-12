@@ -1,4 +1,7 @@
+import { useState } from 'react'
 import useBookStore from '../store/store'
+import { useNavigate } from 'react-router-dom'
+import EditBook from './modals/EditBook'
 interface BooksProps { 
     search: string
 }
@@ -6,29 +9,30 @@ interface BooksProps {
 const BookItem = ({search}: BooksProps) => {
 
   const { books, removeBook} = useBookStore((state) => state)
-  // console.log(books);
+  const [showModal, setShowModal] = useState(false)
+  const navigate = useNavigate()
+
+  const handleShow = () => setShowModal(true)   
+  const handleClose = () => setShowModal(false)
   
   return (
     <>
     {
       books.filter((book) => {
-                return search.toLowerCase() === '' 
+                return search?.toLowerCase() === '' 
                   ? book
-                  : book.title.toLowerCase().includes(search)
+                  : book?.title?.toLowerCase().includes(search)
               })
             .map((book) => (
               <article className="books-section" key={book.id}>
-                <h2>{book.title}</h2>
                 <div>
-                <button>
-                  Edit Book
-                </button>
-                <button
-                onClick={() => removeBook(book.id)}
-                >X</button>
+                  <button onClick={handleShow}>Edit Book</button>
+                  <EditBook isVisible={showModal} handleClose={handleClose}/>
+                  <button onClick={() => removeBook(book.id)}>X</button>
                 </div>
+                <h2>{book.title}</h2>
                 <img 
-                  src={book.covers?.M}   
+                  src={book.covers?.M ?? book.covers}   
                   alt={book.title} 
                   loading='lazy'
                 />

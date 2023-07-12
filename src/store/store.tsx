@@ -21,7 +21,7 @@ const useBookStore = create<{
             },
             signal: controller.signal   
         }) 
-        set({books})
+        set({books: books})
         return () => controller.abort()
     },
     removeBook: (id: string) => 

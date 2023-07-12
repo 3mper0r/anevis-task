@@ -33,7 +33,7 @@ const Search = ({search, setSearch}: searchProps) => {
         placeholder="Search the title"
     />
     <button onClick={handleShow}>Add Book</button>
-    <AddBook isVisible={showModal} handleClose={handleClose} showModal={showModal} />
+    <AddBook isVisible={showModal} handleClose={handleClose} />
     <button onClick={handleLogout}>Logout</button>
     </div>
   )
