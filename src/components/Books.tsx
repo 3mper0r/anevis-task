@@ -6,7 +6,7 @@ import { ErrorBoundary } from "react-error-boundary";
 
 const Books = () => {
 
-    const [search, setSearch] = useState("")    
+    const [search, setSearch] = useState("")   
     const { fetchBooks } = useBookStore((state) => state)
     
     useEffect(() => {     

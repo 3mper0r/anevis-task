@@ -4,6 +4,7 @@ import { z } from "zod"
 import { axiosPrivate } from "../api/axios"
 import { v4 as uuidv4 } from 'uuid';
 import useBookStore from "../store/store"
+import Cookies from "js-cookie";
 
 const BOOKS_URL = '/books'
 interface ModalProps {
@@ -32,11 +33,16 @@ const AddBook = ({isVisible, handleClose}: ModalProps) => {
 
     const onSubmit = async ( formData: FieldValues ) => {
         try {
-            const response = await axiosPrivate.post(BOOKS_URL,
-                JSON.stringify({ id: id, ...formData}))
+            const response = await axiosPrivate.post(BOOKS_URL,{ id: id, ...formData}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json, */*',
+                    'Authorization': `Bearer ${Cookies.get('token')}`
+                },
+            })
                 handleClose()
                 fetchBooks()
-
+                                
         }catch(err) {
             console.log(`Error: ${err}`);
         }

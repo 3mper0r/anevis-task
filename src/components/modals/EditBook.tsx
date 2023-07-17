@@ -3,11 +3,12 @@ import { FieldValues, useForm } from "react-hook-form"
 import { z } from "zod"
 import { axiosPrivate } from "../../api/axios"
 import useBookStore from "../../store/store"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams } from "react-router-dom"
 
 const BOOKS_URL = '/books'
 
 interface editModal {
+    bookId: string;
     isVisible: boolean;
     handleClose: () => void
 }
@@ -20,27 +21,33 @@ const EditBookSchema = z.object({
 
 type EditBookForm = z.infer<typeof EditBookSchema>
 
-const EditBook = ({isVisible, handleClose}: editModal) => {
+
+const EditBook = ({bookId, isVisible, handleClose }: editModal) => {
     const {books, fetchBooks} = useBookStore((state) => state)
+    
     const {
         register, 
         handleSubmit,
+        reset,
         formState: {errors, isValid},
     } = useForm<EditBookForm>({ resolver: zodResolver(EditBookSchema)})
     
-    const {id} = useParams()
-    const navigate = useNavigate()
-    const handleEdit = async (formData: FieldValues) => {
+    console.log(bookId);
+    const handleEdit = async (formData: FieldValues) => {       
         
-        const updatedBook = {id, formData }
         
+        const target = books.find((book) => book.id === bookId)
+        const updatedBook = {bookId, ...target, ...formData}
         try {
-            const response = await axiosPrivate.patch(`${BOOKS_URL}/${id}`, updatedBook)
 
-                //JSON.stringify({id, ...formData, newBook, }))
-                handleClose()
-                fetchBooks()
-                navigate('/books')
+            const {data} = await axiosPrivate.patch(`${BOOKS_URL}/${bookId}`, {...updatedBook})
+            console.log(bookId);
+                       
+                                                                           
+            //reset()                    
+            handleClose()
+            fetchBooks()
+                                     
         } catch (err) {
             console.log(`Error: ${err}`);
         }
@@ -51,7 +58,7 @@ const EditBook = ({isVisible, handleClose}: editModal) => {
   return (
     <div className="fixed inset-0 backdrop-blur-md flex justify-center items-center ">
         <form onSubmit={handleSubmit(handleEdit)} className="bg-gray-400 p-10">
-            <h2 className="">Edit Book</h2>
+            <h2 className="">Edit Book</h2>         
             <label htmlFor="title">Title</label>
             <input 
                 {...register("title")}

@@ -1,16 +1,14 @@
 import { useState } from 'react'
 import useBookStore from '../store/store'
-import { useNavigate } from 'react-router-dom'
 import EditBook from './modals/EditBook'
-interface BooksProps { 
+interface BooksProps {                             
     search: string
 }
 
-const BookItem = ({search}: BooksProps) => {
+const BookItem = ({ search }: BooksProps) => {
 
   const { books, removeBook} = useBookStore((state) => state)
   const [showModal, setShowModal] = useState(false)
-  const navigate = useNavigate()
 
   const handleShow = () => setShowModal(true)   
   const handleClose = () => setShowModal(false)
@@ -27,7 +25,7 @@ const BookItem = ({search}: BooksProps) => {
               <article className="books-section" key={book.id}>
                 <div>
                   <button onClick={handleShow}>Edit Book</button>
-                  <EditBook isVisible={showModal} handleClose={handleClose}/>
+                  <EditBook isVisible={showModal} handleClose={handleClose} bookId={book.id}/>
                   <button onClick={() => removeBook(book.id)}>X</button>
                 </div>
                 <h2>{book.title}</h2>
