@@ -7,9 +7,10 @@ const BOOKS_URL = '/books'
 
 const useBookStore = create<{
     books: Book[],
+    addNewBook: (id: string, formData: FieldValues) => void,
     removeBook: (id: string) => void,
     fetchBooks: () => void,
-    //updateBook: (id: string, formData: FieldValues) => void
+    updateBook: (bookId: string, formData: FieldValues) => void
 }>
     ((set, get) => ({
     books: [],
@@ -26,7 +27,18 @@ const useBookStore = create<{
         set({books: books})
         return () => controller.abort()
     },
-    removeBook: async (id: string) =>  {
+    addNewBook: async (id, formData) => {
+        
+            const response = await axiosPrivate.post(BOOKS_URL,{ id: id, ...formData}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json, */*',
+                    'Authorization': `Bearer ${Cookies.get('token')}`
+                },
+            })
+                
+    },
+    removeBook: async (id) =>  {
         const {data} = await axiosPrivate.delete<Book[]>(`${BOOKS_URL}/${id}`)
     
         set((state) => ({
@@ -34,15 +46,16 @@ const useBookStore = create<{
             books: state.books.filter((newBooks) => newBooks.id !== id)
         }))
     },
-    // updateBook: async (id: string, formData: FieldValues) => {
-    //     const newbook = get().books.find((book) => book.id === id)
-    //     const {data} = await axiosPrivate.patch(`${BOOKS_URL}/${id}`, {id, ...newbook, ...formData})
-
-    //     set((state) => ({
-    //         ...state,
-    //         books: data
-    //     }))
-    // }
+    updateBook: async (bookId, formData) => {
+        const target = get().books.find((book) => book.id === bookId)
+        const updatedBook = {bookId, ...target, ...formData}
+    
+        const {data} = await axiosPrivate.patch(`${BOOKS_URL}/${bookId}`, {...updatedBook})
+        set((state) => ({
+            ...state,
+            data            
+        }))                                                                            
+    }
 }))
 
 export default useBookStore

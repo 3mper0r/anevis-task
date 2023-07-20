@@ -1,15 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldValues, useForm } from "react-hook-form"
 import { z } from "zod"
-import { axiosPrivate } from "../../api/axios"
 import useBookStore from "../../store/store"
-import { useParams } from "react-router-dom"
-
-const BOOKS_URL = '/books'
 
 interface editModal {
     bookId: string;
-    isVisible: boolean;
+    isVisible: boolean | undefined;
     handleClose: () => void
 }
 
@@ -22,8 +18,8 @@ const EditBookSchema = z.object({
 type EditBookForm = z.infer<typeof EditBookSchema>
 
 
-const EditBook = ({bookId, isVisible, handleClose }: editModal) => {
-    const {books, fetchBooks} = useBookStore((state) => state)
+const EditBook = ({ bookId, isVisible, handleClose }: editModal) => {
+    const {fetchBooks, updateBook} = useBookStore((state) => state)
     
     const {
         register, 
@@ -32,25 +28,11 @@ const EditBook = ({bookId, isVisible, handleClose }: editModal) => {
         formState: {errors, isValid},
     } = useForm<EditBookForm>({ resolver: zodResolver(EditBookSchema)})
     
-    console.log(bookId);
-    const handleEdit = async (formData: FieldValues) => {       
-        
-        
-        const target = books.find((book) => book.id === bookId)
-        const updatedBook = {bookId, ...target, ...formData}
-        try {
-
-            const {data} = await axiosPrivate.patch(`${BOOKS_URL}/${bookId}`, {...updatedBook})
-            console.log(bookId);
-                       
-                                                                           
-            //reset()                    
-            handleClose()
-            fetchBooks()
-                                     
-        } catch (err) {
-            console.log(`Error: ${err}`);
-        }
+    const handleEdit = async (formData: FieldValues) => {    
+        updateBook(bookId, formData)                                                 
+        reset()                    
+        handleClose()
+        fetchBooks()                         
     }
 
     if (!isVisible) return null
@@ -89,11 +71,7 @@ const EditBook = ({bookId, isVisible, handleClose }: editModal) => {
             {errors.first_publish_year && (
                 <p>{errors.first_publish_year.message}</p>
             )}
-            <button
-                type="submit" 
-                disabled={!isValid}
-            >
-            Update book</button>
+            <button type="submit" disabled={!isValid}>Update book</button>
             <button onClick={handleClose} type="reset">Cancel</button>
         </form>
     </div>  

@@ -1,17 +1,20 @@
 import { useState } from 'react'
 import useBookStore from '../store/store'
 import EditBook from './modals/EditBook'
-interface BooksProps {                             
-    search: string
+
+interface BooksProps {    
+  id: string
+  search: string;
 }
 
-const BookItem = ({ search }: BooksProps) => {
+const BookItem = ({id, search}: BooksProps) => {
 
   const { books, removeBook} = useBookStore((state) => state)
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState<undefined | string>(undefined)
+  
+  const handleShow = (id: string) => setShowModal(id) 
+  const handleClose = (id: string) => setShowModal(id)
 
-  const handleShow = () => setShowModal(true)   
-  const handleClose = () => setShowModal(false)
   
   return (
     <>
@@ -20,12 +23,12 @@ const BookItem = ({ search }: BooksProps) => {
                 return search?.toLowerCase() === '' 
                   ? book
                   : book?.title?.toLowerCase().includes(search)
-              })
+            })
             .map((book) => (
               <article className="books-section" key={book.id}>
                 <div>
-                  <button onClick={handleShow}>Edit Book</button>
-                  <EditBook isVisible={showModal} handleClose={handleClose} bookId={book.id}/>
+                  <button onClick={() => handleShow(book.id)}>Edit Book</button>
+                    <EditBook isVisible={showModal === book.id} handleClose={() => handleClose(id)} bookId={book.id} />        
                   <button onClick={() => removeBook(book.id)}>X</button>
                 </div>
                 <h2>{book.title}</h2>

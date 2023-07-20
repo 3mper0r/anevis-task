@@ -24,28 +24,19 @@ type AddBookForm = z.infer<typeof addBookSchema>
 
 const AddBook = ({isVisible, handleClose}: ModalProps) => {
     const id: string  = uuidv4()
-    const {fetchBooks} = useBookStore((state) => state)
+    const {fetchBooks, addNewBook} = useBookStore((state) => state)
     const {
         register, 
         handleSubmit,
+        reset,
         formState: {errors, isValid},
     } = useForm<AddBookForm>({ resolver: zodResolver(addBookSchema)})
 
     const onSubmit = async ( formData: FieldValues ) => {
-        try {
-            const response = await axiosPrivate.post(BOOKS_URL,{ id: id, ...formData}, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json, */*',
-                    'Authorization': `Bearer ${Cookies.get('token')}`
-                },
-            })
-                handleClose()
-                fetchBooks()
-                                
-        }catch(err) {
-            console.log(`Error: ${err}`);
-        }
+        addNewBook(id, formData)
+        reset()
+        handleClose()
+        fetchBooks()
     }
 
     if (!isVisible) return null

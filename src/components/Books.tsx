@@ -4,11 +4,11 @@ import Search from "./Search";
 import useBookStore from "../store/store";
 import { ErrorBoundary } from "react-error-boundary";
 
-const Books = () => {
+const Books = (id:string) => {
 
     const [search, setSearch] = useState("")   
     const { fetchBooks } = useBookStore((state) => state)
-    
+
     useEffect(() => {     
       fetchBooks()
     }, [])
@@ -16,9 +16,9 @@ const Books = () => {
   return (
     <> 
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
-        <Search search={search} setSearch={setSearch}/>
+        <Search search={search} setSearch={setSearch} />  
         <section className="main-section" >
-          <BookItem search={search} />
+          <BookItem search={search} id={id} />
         </section>   
       </ErrorBoundary>  
     </>
