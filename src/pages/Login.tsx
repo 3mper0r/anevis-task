@@ -51,7 +51,7 @@ const Login = () => {
                     className="login-input"
                 />
                 {errors.username && (
-                    <p>{errors.username.message}</p>
+                    <p className='text-red-400'>{errors.username.message}</p>
                 )}
                 <label htmlFor="password" className="text-white">Password</label>
                 <input 
@@ -61,7 +61,7 @@ const Login = () => {
                     className="login-input"
                 />
                 {errors.password && (
-                    <p>{errors.password.message}</p>
+                    <p className='text-red-400'>{errors.password.message}</p>
                 )}
                 <button 
                     disabled={!isValid}

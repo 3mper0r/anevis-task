@@ -1,12 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FieldValues, useForm } from "react-hook-form"
 import { z } from "zod"
-import { axiosPrivate } from "../api/axios"
 import { v4 as uuidv4 } from 'uuid';
 import useBookStore from "../store/store"
-import Cookies from "js-cookie";
-
-const BOOKS_URL = '/books'
 interface ModalProps {
     isVisible: boolean;
     handleClose: () => void

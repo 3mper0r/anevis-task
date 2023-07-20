@@ -45,7 +45,7 @@ button:hover {
 }
 
 input:focus {
-    outline: 2px solid #a7a4a4;
+    outline: 2px solid #2a60eb;
 }
 
 button:disabled {
