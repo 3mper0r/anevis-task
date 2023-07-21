@@ -3,6 +3,7 @@ import { useState } from "react";
 import AddBook from "./AddBook";
 import Cookies from "js-cookie"
 import { useNavigate } from "react-router-dom";
+import DigitalClock from "./DigitalClock";
 
 interface searchProps {
     search: string;
@@ -35,9 +36,11 @@ const Navigation = ({search, setSearch}: searchProps) => {
     <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
       <i className="text-gray-400 fas fa-search"></i>
     </div>
-    <button onClick={handleShow}>Add Book</button>
-    <AddBook isVisible={showModal} handleClose={handleClose} />
-    <button onClick={handleLogout}>Logout</button>
+      <button onClick={handleShow}>Add Book</button>
+      <AddBook isVisible={showModal} handleClose={handleClose} />
+      <button onClick={handleLogout}>Logout</button>
+    
+      <DigitalClock/>
     </div>
   )
 }

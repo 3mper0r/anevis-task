@@ -7,6 +7,12 @@ body {
     height: 95vh;
 }  
 
+body.dark-mode {
+    /* Add your dark mode styles here */
+    background-color: #222;
+    color: #fff;
+}
+
 .main-section {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
