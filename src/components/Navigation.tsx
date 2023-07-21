@@ -4,6 +4,7 @@ import AddBook from "./AddBook";
 import Cookies from "js-cookie"
 import { useNavigate } from "react-router-dom";
 import DigitalClock from "./DigitalClock";
+import useDarkMode from '../hooks/useDarkMode'
 
 interface searchProps {
     search: string;
@@ -15,6 +16,7 @@ const Navigation = ({search, setSearch}: searchProps) => {
   const [showModal, setShowModal] = useState(false)
   const handleShow = () => setShowModal(true)
   const handleClose = () => setShowModal(false)
+  const [isDarkMode, toggleDarkMode] = useDarkMode()
 
   const navigate = useNavigate()
 
@@ -39,7 +41,7 @@ const Navigation = ({search, setSearch}: searchProps) => {
       <button onClick={handleShow}>Add Book</button>
       <AddBook isVisible={showModal} handleClose={handleClose} />
       <button onClick={handleLogout}>Logout</button>
-    
+      <button onClick={toggleDarkMode}><i className={isDarkMode ? 'text-amber-400 fas fa-moon' : 'text-white fas fa-moon'}></i></button>
       <DigitalClock/>
     </div>
   )
