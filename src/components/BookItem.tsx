@@ -35,14 +35,15 @@ const BookItem = ({id, search}: BooksProps) => {
                   <i className="fas fa-trash"></i>
                   </button>
                 </div>
-                <h2 className='text-xl font-bold p-3 text-slate-600 hover:text-blue-800'>{book.title}</h2>
+                <h2 className='text-center text-xl font-bold p-3 text-slate-600 hover:text-blue-800'>{book.title}</h2>
                 <img 
+                  className='grid place-content-center'
                   src={book.covers?.M ?? book.covers}   
                   alt={book.title} 
                   loading='lazy'
                 />
                 <div className="book-info mb-6">
-                  <span className='block text-slate-500 hover:text-blue-600 text-sm font-bold shadow-md'>{book.author_name}</span>
+                  <span className='block text-slate-500 hover:text-blue-600 text-sm font-bold shadow-md m-1'>{book.author_name}</span>
                   <span className='italic text-sm text-slate-600'>{book.number_of_pages_median}pg - </span>
                   <span className='text-sm font-bold'>{book.first_publish_year}</span>
                 </div>
